@@ -1,5 +1,7 @@
 package de.fraunhofer.isst.dataspaceconnector.filter.httptracing.internal;
 
+import com.google.common.primitives.Bytes;
+
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -41,12 +43,10 @@ public class RequestWrapper extends HttpServletRequestWrapper {
         if(inputStream != null){
             var buffer = new byte[128];
             var bytesRead = 0;
-            final var oStream = new ByteArrayOutputStream();
             while ((bytesRead = inputStream.read(buffer)) != -1) {
-                oStream.write(buffer, 0, bytesRead);
+                requestBody = Bytes.concat(requestBody, Arrays.copyOfRange(buffer, 0, bytesRead));
             }
 
-            requestBody = oStream.toByteArray();
             isBufferFilled = true;
         }
 
