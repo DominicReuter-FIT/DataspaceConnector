@@ -1,0 +1,156 @@
+type Query{
+    getEntityById(elementId:String): AbstractEntity
+}
+
+#type Mutation{
+#
+#}
+
+type AbstractEntity{
+    id: ID!
+    creationDate:String
+    modificationDate:String
+    additional:MapStringTuple
+}
+
+type MapStringTuple {
+    key:String
+    value:String
+}
+
+#type App {
+#    uuid: ID!
+#    created: String
+#    modified: String
+#    status: Boolean
+#
+#    titles: [String]
+#    descriptions: [String]
+#    keywords:[String]
+#    policy:String
+#    owner:String
+#    license:String
+#    version:String
+#    representations: [AppMetadataRepresentation]
+#}
+
+#type AppMetadataRepresentation {
+#    uuid: ID!
+#    type: String
+#    runtimeEnvironment: String
+#    distributionService: String
+##    backendApp: BackendAppContainer
+#}
+#
+#type BackendAppContainer {
+#    uuid: ID!
+#    available:Boolean
+#    endpoints:[AppEndpoint]
+#    documentation:String
+#    filenameExtension:String
+#    containerTemplate:Template
+#    created:String
+#    modified:String
+#    namespace:String
+#    repoFullName:String
+#    repoType:String
+#    name:String
+#    digest:String
+#    tags:[String]
+#    architecture:String
+#    os:String
+#    url:String
+#    labels:[MapStringTuple]
+#    environmentVariables:[MapStringTuple]
+#    storageConfiguration:[MapStringTuple]
+#    securityScanResult:[SecurityScanResult]
+#}
+#
+
+#
+#type AppEndpoint {
+#    uuid: ID!
+#    #type:AppEndpointType
+#    port: Int
+#    protocoll:String
+#    mediaType:String
+#    language:String
+#    accessURL:String
+#    path:String
+#    outBoundPath:String
+#    inboundPath:String
+#    information:String
+#    documentation:[String]
+#}
+#
+#type Template {
+#    uuid: ID!
+#    type: Int
+#    title: String
+#    name:String
+#    description:String
+#    logo:String
+#    image:String
+#    registry:String
+#    categories:[String]
+#    platform:String
+#    restart_policy:String
+#    ports:[MapStringTuple]
+#    volumes:[Volume]
+#    command:[String]
+#    env:[Environment]
+#    label:[Label]
+#}
+#
+#type Volume {
+#    uuid:ID!
+#    container:String
+#    bind:String
+#}
+#
+#type Environment {
+#    uuid:ID!
+#    name: String
+#    label:String
+#    defaultValue:String
+#}
+#
+#type Label{
+#    uuid:ID!
+#    label:String
+#    value:String
+#}
+#
+#type SecurityScanResult {
+#    uuid: ID!
+#    reportId: ID
+#    scanStatus:String
+#    severity:String
+#    duration:Int
+#    startTime:String
+#    endTime:String
+#    completePercent:Int
+#    scanner:SecurityScannerInformation
+#    summary:SecurityScanSummary
+#}
+#
+#type SecurityScannerInformation {
+#    uuid:ID!
+#    scannerId:ID
+#    name:String
+#    vendor:String
+#    version:String
+#}
+#
+#type SecurityScanSummary {
+#    uuid:ID!
+#    total:Int
+#    fixable:Int
+#    summary:SecurityScanSummaryDetail
+#}
+#
+#type SecurityScanSummaryDetail {
+#    low:Int
+#    medium:Int
+#    high:Int
+#}
