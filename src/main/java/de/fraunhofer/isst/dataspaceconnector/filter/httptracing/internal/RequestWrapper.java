@@ -23,8 +23,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
      */
     public RequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
-        InputStream requestInputStream = request.getInputStream();
-        requestBody = StreamUtils.copyToByteArray(requestInputStream);
+        getRequestBody();
     }
 
     /**
@@ -33,18 +32,18 @@ public class RequestWrapper extends HttpServletRequestWrapper {
      * @return The request body
      * @throws IOException if the request body could not be read
      */
-//    public byte[] getRequestBody() throws IOException {
-//        if (isBufferFilled) {
-//            return requestBody.clone();
-//        }
-//
-//        var inputStream = super.getInputStream();
-//        if(inputStream != null){
-//            requestBody = StreamUtils.copyToByteArray(inputStream);
-//            isBufferFilled = true;
-//        }
-//        return requestBody;
-//    }
+    public byte[] getRequestBody() throws IOException {
+        if (isBufferFilled) {
+            return requestBody.clone();
+        }
+
+        var inputStream = super.getInputStream();
+        if(inputStream != null){
+            requestBody = StreamUtils.copyToByteArray(inputStream);
+            isBufferFilled = true;
+        }
+        return requestBody;
+    }
 
     /**
      * Get the request body of the message as stream
@@ -69,7 +68,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
         private final ByteArrayInputStream buffer;
 
         public CustomServletInputStream(byte[] contents) {
-            this.buffer = new ByteArrayInputStream(contents);
+            buffer = new ByteArrayInputStream(contents);
         }
 
         @Override
