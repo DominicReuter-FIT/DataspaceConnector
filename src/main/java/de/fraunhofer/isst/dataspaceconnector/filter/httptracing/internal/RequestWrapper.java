@@ -6,6 +6,7 @@ import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
@@ -22,7 +23,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
      *
      * @param request The request to be wrapped
      */
-    public RequestWrapper(HttpServletRequest request) {
+    public RequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
     }
 
@@ -54,6 +55,12 @@ public class RequestWrapper extends HttpServletRequestWrapper {
     @Override
     public ServletInputStream getInputStream() throws IOException {
         return new CustomServletInputStream(getRequestBody());
+    }
+
+    @Override
+    public BufferedReader getReader() throws IOException {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(this.requestBody);
+        return new BufferedReader(new InputStreamReader(byteArrayInputStream));
     }
 
     private static class CustomServletInputStream extends ServletInputStream {
