@@ -6,8 +6,7 @@ import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Use this class to wrap incoming HTTP requests too read the message payload multiple times.
@@ -22,8 +21,10 @@ public class RequestWrapper extends HttpServletRequestWrapper {
      *
      * @param request The request to be wrapped
      */
-    public RequestWrapper(HttpServletRequest request) {
+    public RequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
+        InputStream requestInputStream = request.getInputStream();
+        requestBody = StreamUtils.copyToByteArray(requestInputStream);
     }
 
     /**
@@ -32,18 +33,18 @@ public class RequestWrapper extends HttpServletRequestWrapper {
      * @return The request body
      * @throws IOException if the request body could not be read
      */
-    public byte[] getRequestBody() throws IOException {
-        if (isBufferFilled) {
-            return requestBody.clone();
-        }
-
-        var inputStream = super.getInputStream();
-        if(inputStream != null){
-            requestBody = StreamUtils.copyToByteArray(inputStream);
-            isBufferFilled = true;
-        }
-        return requestBody;
-    }
+//    public byte[] getRequestBody() throws IOException {
+//        if (isBufferFilled) {
+//            return requestBody.clone();
+//        }
+//
+//        var inputStream = super.getInputStream();
+//        if(inputStream != null){
+//            requestBody = StreamUtils.copyToByteArray(inputStream);
+//            isBufferFilled = true;
+//        }
+//        return requestBody;
+//    }
 
     /**
      * Get the request body of the message as stream
@@ -53,10 +54,18 @@ public class RequestWrapper extends HttpServletRequestWrapper {
      */
     @Override
     public ServletInputStream getInputStream() throws IOException {
-        return new CustomServletInputStream(getRequestBody());
+        //return new CustomServletInputStream(getRequestBody());
+        return new CustomServletInputStream(requestBody);
+    }
+
+    @Override
+    public BufferedReader getReader() throws IOException{
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(this.requestBody);
+        return new BufferedReader(new InputStreamReader(byteArrayInputStream));
     }
 
     private static class CustomServletInputStream extends ServletInputStream {
+
         private final ByteArrayInputStream buffer;
 
         public CustomServletInputStream(byte[] contents) {
