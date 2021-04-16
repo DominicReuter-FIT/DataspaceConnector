@@ -53,8 +53,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
      */
     @Override
     public ServletInputStream getInputStream() throws IOException {
-        //return new CustomServletInputStream(getRequestBody());
-        return new CustomServletInputStream(requestBody);
+        return new CustomServletInputStream(getRequestBody());
     }
 
     @Override
