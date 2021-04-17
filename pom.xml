@@ -196,6 +196,14 @@
 			</exclusions>
 		</dependency>
 
+		<dependency>
+			<groupId>io.leangen.graphql</groupId>
+			<artifactId>spqr</artifactId>
+			<version>0.11.2</version>
+		</dependency>
+
+		<!-- Spring Boot Graphql END -->
+
 		<!-- https://mvnrepository.com/artifact/org.springframework.plugin/spring-plugin-core -->
 		<dependency>
 			<groupId>org.springframework.plugin</groupId>

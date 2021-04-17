@@ -1,5 +1,11 @@
 type Query{
     getEntityById(elementId:String): AbstractEntity
+    getConnectorWithoutResources: String
+    getOfferedResourceById(resourceId:String) : String
+    getOutboundModelVersion:String
+    getInboundModelVersion:[String]
+    getCurrentDat:String
+    getConnectorId:String
 }
 
 #type Mutation{
