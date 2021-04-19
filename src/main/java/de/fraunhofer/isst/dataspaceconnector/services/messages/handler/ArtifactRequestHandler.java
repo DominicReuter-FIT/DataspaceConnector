@@ -20,8 +20,8 @@ import de.fraunhofer.isst.dataspaceconnector.services.messages.MessageService;
 import de.fraunhofer.isst.dataspaceconnector.services.messages.types.ArtifactResponseService;
 import de.fraunhofer.isst.dataspaceconnector.services.resources.EntityDependencyResolver;
 import de.fraunhofer.isst.dataspaceconnector.services.usagecontrol.PolicyEnforcementService;
-import de.fraunhofer.isst.dataspaceconnector.utils.EndpointUtils;
 import de.fraunhofer.isst.dataspaceconnector.utils.MessageUtils;
+import de.fraunhofer.isst.dataspaceconnector.utils.SelfLinkHelper;
 import de.fraunhofer.isst.ids.framework.messaging.model.messages.MessageHandler;
 import de.fraunhofer.isst.ids.framework.messaging.model.messages.MessagePayload;
 import de.fraunhofer.isst.ids.framework.messaging.model.messages.SupportedMessageType;
@@ -29,8 +29,6 @@ import de.fraunhofer.isst.ids.framework.messaging.model.responses.BodyResponse;
 import de.fraunhofer.isst.ids.framework.messaging.model.responses.MessageResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -46,11 +44,6 @@ import java.util.List;
 @SupportedMessageType(ArtifactRequestMessageImpl.class)
 @RequiredArgsConstructor
 public class ArtifactRequestHandler implements MessageHandler<ArtifactRequestMessageImpl> {
-
-    /**
-     * Class level logger.
-     */
-    public static final Logger LOGGER = LoggerFactory.getLogger(DescriptionRequestHandler.class);
 
     /**
      * Service for message processing.
@@ -212,7 +205,7 @@ public class ArtifactRequestHandler implements MessageHandler<ArtifactRequestMes
                                             final URI requestedArtifact)
             throws ResourceNotFoundException {
         for (final var artifact : artifacts) {
-            final var endpoint = EndpointUtils.getSelfLink(artifact);
+            final var endpoint = SelfLinkHelper.getSelfLink(artifact);
             if (endpoint.equals(requestedArtifact)) {
                 return true;
             }

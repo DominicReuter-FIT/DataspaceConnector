@@ -9,7 +9,7 @@ import de.fraunhofer.isst.dataspaceconnector.exceptions.ResourceNotFoundExceptio
 import de.fraunhofer.isst.dataspaceconnector.model.Artifact;
 import de.fraunhofer.isst.dataspaceconnector.model.ArtifactImpl;
 import de.fraunhofer.isst.dataspaceconnector.model.Representation;
-import de.fraunhofer.isst.dataspaceconnector.model.view.ArtifactView;
+import de.fraunhofer.isst.dataspaceconnector.view.ArtifactView;
 import de.fraunhofer.isst.dataspaceconnector.services.resources.RepresentationArtifactLinker;
 import de.fraunhofer.isst.dataspaceconnector.utils.Utils;
 import lombok.SneakyThrows;
@@ -30,8 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest(classes = {RepresentationArtifactController.class})
-class RepresentationArtifactControllerTest {
+@SpringBootTest(classes = {RelationControllers.RepresentationsToArtifacts.class})
+class RepresentationsToArtifactsTest {
 
     @MockBean
     RepresentationArtifactLinker linker;
@@ -44,7 +44,7 @@ class RepresentationArtifactControllerTest {
 
     @Autowired
     @InjectMocks
-    private RepresentationArtifactController controller;
+    private RelationControllers.RepresentationsToArtifacts controller;
 
     private Representation representation = getRepresentation("Owner");
     private List<Artifact> artifacts = new ArrayList<>();

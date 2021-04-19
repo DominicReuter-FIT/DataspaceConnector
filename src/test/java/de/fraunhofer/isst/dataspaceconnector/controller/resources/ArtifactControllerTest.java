@@ -5,7 +5,7 @@ import java.util.UUID;
 import de.fraunhofer.isst.dataspaceconnector.exceptions.ResourceNotFoundException;
 import de.fraunhofer.isst.dataspaceconnector.model.Artifact;
 import de.fraunhofer.isst.dataspaceconnector.model.QueryInput;
-import de.fraunhofer.isst.dataspaceconnector.model.view.ArtifactViewAssembler;
+import de.fraunhofer.isst.dataspaceconnector.view.ArtifactViewAssembler;
 import de.fraunhofer.isst.dataspaceconnector.services.resources.ArtifactService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,7 +19,7 @@ import org.springframework.http.HttpStatus;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest(classes = {ArtifactController.class})
+@SpringBootTest(classes = {ResourceControllers.ArtifactController.class})
 class ArtifactControllerTest {
     @MockBean
     ArtifactService service;
@@ -32,7 +32,7 @@ class ArtifactControllerTest {
 
     @Autowired
     @InjectMocks
-    ArtifactController controller;
+    ResourceControllers.ArtifactController controller;
 
     @Test
     public void getData_null_throwIllegalArgumentException() {
