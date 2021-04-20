@@ -18,7 +18,8 @@ import lombok.Setter;
 @Entity
 @Table
 @Getter
-@Setter(AccessLevel.PACKAGE)
+//@Setter(AccessLevel.PACKAGE)
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 public class Representation extends AbstractEntity {
@@ -53,6 +54,10 @@ public class Representation extends AbstractEntity {
      * content like RDF/XML."
      */
     private String standard;
+
+    private String runtimeEnvironment;
+
+    private URI distributionService;
 
     /**
      * The artifacts associated with this representation.
