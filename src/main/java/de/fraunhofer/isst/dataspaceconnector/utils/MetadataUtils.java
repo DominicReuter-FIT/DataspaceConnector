@@ -13,7 +13,17 @@ public final class MetadataUtils {
         // not used
     }
 
-    /**
+   
+    public static Optional<Integer> updateInteger(Integer oldInt, Integer newInt, Integer defaultInt){
+        final var newValue = newInt == null ? defaultInt : newInt;
+        if(oldInt == null || !oldInt.equals(newValue)) {
+            return Optional.of(newInt);
+        }
+        return Optional.empty();
+    }
+
+
+ /**
      * Update string.
      *
      * @param oldTitle     Old string.

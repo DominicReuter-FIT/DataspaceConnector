@@ -1,5 +1,6 @@
 package de.fraunhofer.isst.dataspaceconnector.model.webhook.harbor;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.fraunhofer.isst.dataspaceconnector.model.AbstractEntity;
 import lombok.*;
 
@@ -21,13 +22,17 @@ public class Event extends AbstractEntity {
      **/
     private static final long serialVersionUID = 1L;
 
-    private ZonedDateTime occurAt;
-
-    private String operator;
-
+    @JsonProperty("type")
     private EventType type;
 
+    @JsonProperty("occur_at")
+    private ZonedDateTime occurAt;
+
+    @JsonProperty("operator")
+    private String operator;
+
     @OneToOne
+    @JsonProperty("event_data")
     private EventData eventData;
 
 }
