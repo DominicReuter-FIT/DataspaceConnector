@@ -1,8 +1,5 @@
 package de.fraunhofer.isst.dataspaceconnector.services;
 
-import java.net.URI;
-import java.util.Objects;
-
 import de.fraunhofer.isst.dataspaceconnector.exceptions.InvalidResourceException;
 import de.fraunhofer.isst.dataspaceconnector.exceptions.ResourceNotFoundException;
 import de.fraunhofer.isst.dataspaceconnector.exceptions.SelfLinkCreationException;
@@ -16,7 +13,6 @@ import de.fraunhofer.isst.dataspaceconnector.model.OfferedResource;
 import de.fraunhofer.isst.dataspaceconnector.model.OfferedResourceDesc;
 import de.fraunhofer.isst.dataspaceconnector.model.QueryInput;
 import de.fraunhofer.isst.dataspaceconnector.model.Representation;
-import de.fraunhofer.isst.dataspaceconnector.model.RequestedResource;
 import de.fraunhofer.isst.dataspaceconnector.services.ids.IdsArtifactBuilder;
 import de.fraunhofer.isst.dataspaceconnector.services.ids.IdsCatalogBuilder;
 import de.fraunhofer.isst.dataspaceconnector.services.ids.IdsContractBuilder;
@@ -33,19 +29,17 @@ import de.fraunhofer.isst.dataspaceconnector.utils.EndpointUtils;
 import de.fraunhofer.isst.dataspaceconnector.utils.ErrorMessages;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+import java.util.Objects;
+
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class EntityResolver {
-
-    /**
-     * Class level logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(EntityResolver.class);
 
     /**
      * Service for artifacts.
@@ -87,14 +81,24 @@ public class EntityResolver {
      */
     private final @NonNull IdsCatalogBuilder catalogBuilder;
 
-    private final @NonNull IdsResourceBuilder<OfferedResource> offeredResourceBuilder;
+    /**
+     * Service for building ids resource.
+     */
+    private final @NonNull IdsResourceBuilder<OfferedResource> offerBuilder;
 
-    private final @NonNull IdsResourceBuilder<RequestedResource> requestedResourceBuilder;
-
+    /**
+     * Service for building ids artifact.
+     */
     private final @NonNull IdsArtifactBuilder artifactBuilder;
 
+    /**
+     * Service for building ids representation.
+     */
     private final @NonNull IdsRepresentationBuilder representationBuilder;
 
+    /**
+     * Service for building ids contract.
+     */
     private final @NonNull IdsContractBuilder contractBuilder;
 
     /**
@@ -132,8 +136,10 @@ public class EntityResolver {
                     return null;
             }
         } catch (Exception exception) {
-            LOGGER.debug("Resource not found. [exception=({}), elementId=({})]",
-                    exception.getMessage(), elementId);
+            if (log.isDebugEnabled()) {
+                log.debug("Resource not found. [exception=({}), elementId=({})]",
+                        exception.getMessage(), elementId, exception);
+            }
             throw new ResourceNotFoundException(ErrorMessages.EMTPY_ENTITY.toString(), exception);
         }
     }
@@ -151,10 +157,7 @@ public class EntityResolver {
                 final var artifact = artifactBuilder.create((Artifact) entity);
                 return Objects.requireNonNull(artifact).toRdf();
             } else if (entity instanceof OfferedResource) {
-                final var resource = offeredResourceBuilder.create((OfferedResource) entity);
-                return Objects.requireNonNull(resource).toRdf();
-            } else if (entity instanceof RequestedResource) {
-                final var resource = requestedResourceBuilder.create((RequestedResource) entity);
+                final var resource = offerBuilder.create((OfferedResource) entity);
                 return Objects.requireNonNull(resource).toRdf();
             } else if (entity instanceof Representation) {
                 final var representation = representationBuilder.create((Representation) entity);
@@ -173,16 +176,24 @@ public class EntityResolver {
                 return rule.getValue();
             }
         } catch (SelfLinkCreationException exception) {
-            LOGGER.warn("Could not provide ids object. [entity=({})]", entity);
+            if (log.isWarnEnabled()) {
+                log.warn("Could not provide ids object. [entity=({}), exception=({})]",
+                        entity, exception.getMessage(), exception);
+            }
             throw exception;
         } catch (Exception exception) {
             // If we do not allow requesting an object type, respond with exception.
-            LOGGER.warn("Could not provide ids object. [entity=({})]", entity);
+            if (log.isWarnEnabled()) {
+                log.warn("Could not provide ids object. [entity=({}), exception=({})]",
+                        entity, exception.getMessage(), exception);
+            }
             throw new InvalidResourceException("No provided description for requested element.");
         }
 
         // If we do not allow requesting an object type, respond with exception.
-        LOGGER.debug("Not a requestable ids object. [entity=({})]", entity);
+        if (log.isDebugEnabled()) {
+            log.debug("Not a requestable ids object. [entity=({})]", entity);
+        }
         throw new InvalidResourceException("No provided description for requested element.");
     }
 
@@ -217,7 +228,9 @@ public class EntityResolver {
         }
 
         // Should not be reached.
-        LOGGER.warn("Found no artifact with [remoteId=({})]", id);
+        if (log.isWarnEnabled()) {
+            log.warn("Found no artifact with [remoteId=({})]", id);
+        }
         throw new ResourceNotFoundException("Found no artifact with this remote id: " + id);
     }
 

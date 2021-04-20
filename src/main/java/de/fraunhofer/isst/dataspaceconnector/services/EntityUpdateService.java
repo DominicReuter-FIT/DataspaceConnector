@@ -10,26 +10,20 @@ import de.fraunhofer.isst.dataspaceconnector.model.RequestedResourceDesc;
 import de.fraunhofer.isst.dataspaceconnector.services.resources.ArtifactService;
 import de.fraunhofer.isst.dataspaceconnector.services.resources.RepresentationService;
 import de.fraunhofer.isst.dataspaceconnector.services.resources.ResourceService;
-import de.fraunhofer.isst.dataspaceconnector.utils.EndpointUtils;
 import de.fraunhofer.isst.dataspaceconnector.utils.MappingUtils;
+import de.fraunhofer.isst.dataspaceconnector.utils.SelfLinkHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
 import java.util.UUID;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class EntityUpdateService {
-
-    /**
-     * Class level logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(EntityUpdateService.class);
 
     /**
      * Service for requested resources.
@@ -84,15 +78,17 @@ public class EntityUpdateService {
         final var resources = requestService.getAll(Pageable.unpaged());
         for (final var entity : resources) {
             final var entityId = entity.getId();
-            final var remoteId = URI.create(""); // TODO entity.getRemoteId();
+            final var remoteId = entity.getRemoteId();
             if (remoteId.equals(resourceId)) {
                 final var template =
                         MappingUtils.fromIdsResource(resource);
                 final var desc = template.getDesc();
 
                 final var update = requestService.update(entityId, desc);
-                final var uri = EndpointUtils.getSelfLink(update);
-                LOGGER.info("Updated resource: " + uri);
+                final var uri = SelfLinkHelper.getSelfLink(update);
+                if (log.isDebugEnabled()) {
+                    log.debug("Updated resource: " + uri);
+                }
             }
         }
     }
@@ -115,8 +111,10 @@ public class EntityUpdateService {
                 final var desc = template.getDesc();
 
                 final var update = representationService.update(entityId, desc);
-                final var uri = EndpointUtils.getSelfLink(update);
-                LOGGER.info("Updated representation: " + uri);
+                final var uri = SelfLinkHelper.getSelfLink(update);
+                if (log.isDebugEnabled()) {
+                    log.debug("Updated representation: " + uri);
+                }
             }
         }
     }
@@ -140,8 +138,10 @@ public class EntityUpdateService {
                 final var desc = template.getDesc();
 
                 final var update = artifactService.update(entityId, desc);
-                final var uri = EndpointUtils.getSelfLink(update);
-                LOGGER.info("Updated artifact: " + uri);
+                final var uri = SelfLinkHelper.getSelfLink(update);
+                if (log.isDebugEnabled()) {
+                    log.debug("Updated artifact: " + uri);
+                }
             }
         }
     }

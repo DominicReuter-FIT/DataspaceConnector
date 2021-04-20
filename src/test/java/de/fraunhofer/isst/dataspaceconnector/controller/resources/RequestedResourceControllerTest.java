@@ -2,7 +2,7 @@ package de.fraunhofer.isst.dataspaceconnector.controller.resources;
 
 import de.fraunhofer.isst.dataspaceconnector.model.RequestedResource;
 import de.fraunhofer.isst.dataspaceconnector.model.RequestedResourceDesc;
-import de.fraunhofer.isst.dataspaceconnector.model.view.RequestedResourceViewAssembler;
+import de.fraunhofer.isst.dataspaceconnector.view.RequestedResourceViewAssembler;
 import de.fraunhofer.isst.dataspaceconnector.services.resources.ResourceService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@SpringBootTest(classes = {RequestedResourceController.class})
+@SpringBootTest(classes = {ResourceControllers.RequestedResourceController.class})
 class RequestedResourceControllerTest {
     @MockBean
     private ResourceService<RequestedResource, RequestedResourceDesc> service;
@@ -29,7 +29,7 @@ class RequestedResourceControllerTest {
 
     @Autowired
     @InjectMocks
-    private RequestedResourceController controller;
+    private ResourceControllers.RequestedResourceController controller;
 
     @Test
     public void create_null_returnMethodNotAllowed() {

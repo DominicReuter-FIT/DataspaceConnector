@@ -1,11 +1,5 @@
 package de.fraunhofer.isst.dataspaceconnector.services.messages;
 
-import javax.persistence.PersistenceException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fraunhofer.iais.eis.ContractAgreement;
 import de.fraunhofer.iais.eis.ContractRequest;
@@ -35,25 +29,26 @@ import de.fraunhofer.isst.dataspaceconnector.services.messages.types.ContractAgr
 import de.fraunhofer.isst.dataspaceconnector.services.messages.types.ContractRequestService;
 import de.fraunhofer.isst.dataspaceconnector.services.messages.types.DescriptionRequestService;
 import de.fraunhofer.isst.dataspaceconnector.services.resources.TemplateBuilder;
-import de.fraunhofer.isst.dataspaceconnector.utils.EndpointUtils;
 import de.fraunhofer.isst.dataspaceconnector.utils.IdsUtils;
 import de.fraunhofer.isst.dataspaceconnector.utils.MessageUtils;
+import de.fraunhofer.isst.dataspaceconnector.utils.SelfLinkHelper;
 import de.fraunhofer.isst.dataspaceconnector.utils.TemplateUtils;
 import de.fraunhofer.isst.ids.framework.messaging.model.messages.MessagePayload;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.PersistenceException;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class MessageService {
-
-    /**
-     * Class level logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(MessageService.class);
 
     /**
      * Service for description request messages.
@@ -299,9 +294,11 @@ public class MessageService {
 
             // Save all entities.
             final var requestedResource = templateBuilder.build(resourceTemplate);
-            return EndpointUtils.getSelfLink(requestedResource);
+            return SelfLinkHelper.getSelfLink(requestedResource);
         } catch (Exception e) {
-            LOGGER.warn("Could not store resource. [exception=({})]", e.getMessage());
+            if (log.isWarnEnabled()) {
+                log.warn("Could not store resource. [exception=({})]", e.getMessage(), e);
+            }
             throw new PersistenceException("Could not store resource.", e);
         }
     }
@@ -321,9 +318,11 @@ public class MessageService {
         final var artifact = entityResolver.getArtifactByRemoteId(artifactId);
 
         updateService.updateDataOfArtifact(artifact, data);
-        LOGGER.info("Updated data from artifact. [target=({})]", artifactId);
+        if (log.isDebugEnabled()) {
+            log.debug("Updated data from artifact. [target=({})]", artifactId);
+        }
 
-        return EndpointUtils.getSelfLink(artifact);
+        return SelfLinkHelper.getSelfLink(artifact);
     }
 
     /**
@@ -344,9 +343,11 @@ public class MessageService {
             } else {
                 return objectMapper.readValue(payload, QueryInput.class);
             }
-        } catch (Exception exception) {
-            LOGGER.debug("Invalid query input. [exception=({})]", exception.getMessage());
-            throw new InvalidInputException("Invalid query input.", exception);
+        } catch (Exception e) {
+            if (log.isDebugEnabled()) {
+                log.debug("Invalid query input. [exception=({})]", e.getMessage(), e);
+            }
+            throw new InvalidInputException("Invalid query input.", e);
         }
     }
 }

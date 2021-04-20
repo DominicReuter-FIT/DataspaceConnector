@@ -7,7 +7,7 @@ import de.fraunhofer.isst.dataspaceconnector.exceptions.ResourceNotFoundExceptio
 import de.fraunhofer.isst.dataspaceconnector.model.Catalog;
 import de.fraunhofer.isst.dataspaceconnector.model.CatalogDesc;
 import de.fraunhofer.isst.dataspaceconnector.model.OfferedResource;
-import de.fraunhofer.isst.dataspaceconnector.model.view.CatalogViewAssembler;
+import de.fraunhofer.isst.dataspaceconnector.view.CatalogViewAssembler;
 import de.fraunhofer.isst.dataspaceconnector.services.resources.CatalogService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(classes = {CatalogController.class})
+@SpringBootTest(classes = {ResourceControllers.CatalogController.class})
 class CatalogControllerTest {
     @MockBean
     private CatalogService catalogService;
@@ -38,7 +38,7 @@ class CatalogControllerTest {
     private PagedResourcesAssembler<Catalog> pagedAssembler;
 
     @Autowired
-    private CatalogController controller;
+    private ResourceControllers.CatalogController controller;
 
     private CatalogDesc desc = getDesc();
     private CatalogDesc updatedDescOne = getUpdatedDesc();
