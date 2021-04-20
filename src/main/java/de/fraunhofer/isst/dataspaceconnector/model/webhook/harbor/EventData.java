@@ -1,5 +1,6 @@
 package de.fraunhofer.isst.dataspaceconnector.model.webhook.harbor;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.fraunhofer.isst.dataspaceconnector.model.AbstractEntity;
 import lombok.*;
 
@@ -23,9 +24,11 @@ public class EventData extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
     @OneToMany
+    @JsonProperty("resources")
     private List<Resources> resources;
 
     @OneToOne
+    @JsonProperty("repository")
     private Repository repository;
 
 

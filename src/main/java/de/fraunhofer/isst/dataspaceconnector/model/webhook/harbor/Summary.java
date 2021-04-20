@@ -1,5 +1,6 @@
 package de.fraunhofer.isst.dataspaceconnector.model.webhook.harbor;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.fraunhofer.isst.dataspaceconnector.model.AbstractEntity;
 import lombok.*;
 
@@ -19,10 +20,13 @@ public class Summary extends AbstractEntity {
      **/
     private static final long serialVersionUID = 1L;
 
+    @JsonProperty("total")
     private int total;
 
+    @JsonProperty("fixable")
     private int fixable;
 
     @OneToOne
+    @JsonProperty("summary")
     private SummaryDetail summary;
 }

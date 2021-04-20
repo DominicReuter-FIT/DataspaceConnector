@@ -1,11 +1,10 @@
-package de.fraunhofer.isst.dataspaceconnector.model.webhook.harbor;
+package de.fraunhofer.isst.dataspaceconnector.model.container.template;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.fraunhofer.isst.dataspaceconnector.model.AbstractEntity;
 import lombok.*;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,23 +13,16 @@ import javax.persistence.Table;
 @Setter(AccessLevel.PACKAGE)
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
-public class Resources extends AbstractEntity {
+public class Label extends AbstractEntity {
 
     /**
      * Serial version uid.
      **/
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("digest")
-    private String digest;
+    @JsonProperty("label")
+    public String label;
 
-    @JsonProperty("tag")
-    private String tag;
-
-    @JsonProperty("resource_url")
-    private String resourceUrl;
-
-    @OneToOne
-    @JsonProperty("scan_overview")
-    private ScanOverview scanOverview;
+    @JsonProperty("value")
+    public String value;
 }
