@@ -11,7 +11,8 @@ import javax.persistence.Table;
 @Entity
 @Table
 @Getter
-@Setter(AccessLevel.PACKAGE)
+//@Setter(AccessLevel.PACKAGE)
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 public class Environment extends AbstractEntity {
@@ -22,19 +23,19 @@ public class Environment extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("name")
-    public String name;
+    private String name;
 
     @JsonProperty("label")
-    public String label;
+    private String label;
 
     @JsonProperty("description")
-    public String description;
+    private String description;
 
     @JsonProperty("default")
-    public String defaultValue;
+    private String defaultValue;
 
     @JsonProperty("preset")
-    public boolean preset;
+    private boolean preset;
 
 //    @JsonProperty("select")
 //    public String select;

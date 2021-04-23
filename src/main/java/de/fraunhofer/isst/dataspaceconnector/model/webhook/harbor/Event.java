@@ -26,7 +26,7 @@ public class Event extends AbstractEntity {
     private EventType type;
 
     @JsonProperty("occur_at")
-    private ZonedDateTime occurAt;
+    private long occurAt;
 
     @JsonProperty("operator")
     private String operator;

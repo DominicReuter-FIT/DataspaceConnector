@@ -34,7 +34,7 @@ public class TemplateFactory implements AbstractFactory<Template, TemplateDesc> 
 
         final var template = new Template();
         template.setVolumes(new ArrayList<>());
-        template.setEnv(new ArrayList<>());
+        template.setEnvironment(new ArrayList<>());
         template.setLabel(new ArrayList<>());
 
         update(template, desc);

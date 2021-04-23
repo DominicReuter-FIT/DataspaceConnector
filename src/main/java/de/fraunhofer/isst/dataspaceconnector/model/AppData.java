@@ -24,6 +24,8 @@ public class AppData extends Data {
 
     private String repoFullName;
 
+    private String repoName;
+
     private String repoType;
 
     private String name;
@@ -45,6 +47,9 @@ public class AppData extends Data {
     private List<String> tags;
 
     @ElementCollection
+    private Map<String, String> labels;
+
+    @ElementCollection
     private Map<String, String> environmentVariables;
 
     @ElementCollection
@@ -55,5 +60,8 @@ public class AppData extends Data {
 
     @ManyToMany
     private List<ScanOverview> securityScanResult;
+
+
+
 
 }

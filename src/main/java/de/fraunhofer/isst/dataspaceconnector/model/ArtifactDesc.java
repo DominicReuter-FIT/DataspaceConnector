@@ -44,7 +44,7 @@ public class ArtifactDesc extends AbstractDescription<Artifact> {
     /**
      * Some value for storing data locally.
      */
-    private String value;
+    private de.fraunhofer.isst.dataspaceconnector.model.Data value;
 
     /**
      * Indicates whether the artifact should be downloaded automatically

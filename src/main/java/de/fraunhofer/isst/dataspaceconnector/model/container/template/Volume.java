@@ -11,12 +11,11 @@ import java.net.URI;
 @Entity
 @Table
 @Getter
-@Setter(AccessLevel.PACKAGE)
+//@Setter(AccessLevel.PACKAGE)
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 public class Volume extends AbstractEntity {
-
-
 
     /**
      * Serial version uid.
@@ -24,9 +23,9 @@ public class Volume extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("container")
-    public String container;
+    private String container;
 
     @JsonProperty("bind")
-    public String bind;
+    private String bind;
 
 }

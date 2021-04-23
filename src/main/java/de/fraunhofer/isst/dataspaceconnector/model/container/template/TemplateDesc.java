@@ -36,4 +36,10 @@ public class TemplateDesc extends AbstractDescription<Template> {
 
     private Map<String, String> ports;
 
+    private List<Volume> volumes;
+
+    private List<Environment> environment;
+
+    private List<Label> label;
+
 }

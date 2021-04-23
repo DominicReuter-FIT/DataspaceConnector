@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class EventDesc extends AbstractDescription<Event> {
 
-    private ZonedDateTime occurAt;
+    private long occurAt;
 
     private String operator;
 
