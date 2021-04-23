@@ -74,7 +74,7 @@ public class Template extends AbstractEntity {
     @OneToMany
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("env")
-    private List<Environment> env;
+    private List<Environment> environment;
 
     @OneToMany
     @JsonInclude(JsonInclude.Include.NON_NULL)

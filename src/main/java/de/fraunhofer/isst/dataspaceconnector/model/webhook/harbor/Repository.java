@@ -22,7 +22,7 @@ public class Repository extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("date_created")
-    private Date dateCreated;
+    private long dateCreated;
 
     @JsonProperty("name")
     private String name;

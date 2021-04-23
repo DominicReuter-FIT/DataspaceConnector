@@ -36,4 +36,8 @@ public class RepresentationDesc extends AbstractDescription<Representation> {
      * content like RDF/XML."
      */
     private String standard;
+
+    private String runtimeEnvironment;
+
+    private URI distributionService;
 }

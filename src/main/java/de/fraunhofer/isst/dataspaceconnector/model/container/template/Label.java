@@ -10,7 +10,8 @@ import javax.persistence.Table;
 @Entity
 @Table
 @Getter
-@Setter(AccessLevel.PACKAGE)
+//@Setter(AccessLevel.PACKAGE)
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 public class Label extends AbstractEntity {
@@ -21,8 +22,10 @@ public class Label extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("label")
-    public String label;
+    private String label;
 
     @JsonProperty("value")
-    public String value;
+    private String value;
+
+
 }
