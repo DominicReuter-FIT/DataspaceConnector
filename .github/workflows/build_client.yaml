@@ -1,0 +1,81 @@
+name: client
+
+push:
+    branches: [ TestClienCreation ]
+    #tags: 'v*'
+   release:
+     types: [published]
+
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      
+      - name: Find tag
+        id: get_tag
+        run: |
+          echo ${GITHUB_REF#refs/tags/}
+          echo ::set-output name=TAG::${GITHUB_REF#refs/tags/}
+        if: startsWith(github.ref, 'refs/tags')
+      
+      - name: Find branch name
+        id: get_branch
+        run: |
+          # to lowercase
+          TMP=$(git rev-parse --abbrev-ref HEAD)
+          TMP=$(echo "$TMP" | tr '[:upper:]' '[:lower:]')
+          echo $TMP
+          echo ::set-output name=BRANCH::$TMP
+                        
+      - name: Showing Dataspace Connector history
+        working-directory: .
+        run: |
+          ls -l
+          git log
+      
+      - name: Download and install OpenAPIGenerator
+        run: |
+          mkdir -p ~/bin/openapitools
+          curl https://raw.githubusercontent.com/OpenAPITools/openapi-generator/master/bin/utils/openapi-generator-cli.sh > ~/bin/openapitools/openapi-generator-cli
+          chmod u+x ~/bin/openapitools/openapi-generator-cli
+          export PATH=$PATH:~/bin/openapitools/
+          ~/bin/openapitools/openapi-generator-cli version
+      
+      - name: Generate API Client using OpenAPI Generator
+        run: |
+          export PATH=$PATH:~/bin/openapitools/
+          openapi-generator-cli generate -i openapi.yaml -g java --api-package io.dataspaceconnector.controller --model-package io.dataspaceconnector.model -p artifactId=dataspace-client-java,groupId=io.dataspaceconnector -p artifactVersion=2.0 --output dataspaceconnector-client-java/
+
+      - name: Package Generated client (NEW Swagger) into Single Jar file
+        working-directory: harbor-client-java        
+        run: |
+          mkdir -p ../generated-artifacts/   
+          # patch pom.xml.patch       
+          mvn clean package
+          mv -v target/*.jar ../generated-artifacts/
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: "Release ${{ env.ON_GIT_TAG }}"
+          draft: false
+          prerelease: false
+          
+      - name: Upload Client Release Library Jar (New Swagger)
+        id: upload-release-asset-lib-jar-new-swagger
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: generated-artifacts/dataspace-client-java-2.0.jar
+          asset_name: dataspace-client-java-2.0.jar
+          asset_content_type: application/jar
